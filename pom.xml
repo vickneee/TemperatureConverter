@@ -36,6 +36,7 @@
     </dependencies>
 
     <build>
+        <finalName>TemperatureConverter</finalName>
         <plugins>
             <!-- JaCoCo plugin for code coverage -->
             <plugin>
@@ -65,7 +66,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Myapp</mainClass> <!-- Correct main class -->
+                            <mainClass>Main</mainClass> <!-- Correct main class -->
                         </manifest>
                     </archive>
                 </configuration>
