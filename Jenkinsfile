@@ -5,7 +5,7 @@ pipeline {
         // Define Docker Hub credentials ID
         DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
         // Define Docker Hub repository name
-        DOCKERHUB_REPO = 'vickneee/TemperatureConverter'
+        DOCKERHUB_REPO = 'vickneee/temperature-converter'
         // Define Docker image tag
         DOCKER_IMAGE_TAG = 'latest'
     }
