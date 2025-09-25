@@ -11,20 +11,20 @@ public class Main {
         int fahrenheit = scanner.nextInt();
         double celsius = (int) temp.fahrenheitToCelsius(fahrenheit);
         System.out.println(fahrenheit + " in Celsius: " + celsius);
+        System.out.println();
 
-        System.out.println("Convert Fahrenheit to Celsius");
-        System.out.println("Give temperature in Fahrenheit: ");
+        System.out.println("Convert Celsius to Fahrenheit");
+        System.out.println("Give temperature in Celsius: ");
         int celsius1 = scanner.nextInt();
         double fahrenheit1 = (int) temp.celsiusToFahrenheit(celsius1);
         System.out.println(celsius1 + " in Fahrenheit: " + fahrenheit1);
         System.out.println();
 
-        System.out.println(temp.isExtremeTemperature(20));
-        System.out.println(temp.isExtremeTemperature(50));
-        System.out.println(temp.isExtremeTemperature(55));
-        System.out.println(temp.isExtremeTemperature(-60));
-        System.out.println(temp.isExtremeTemperature(-64));
-
-        System.out.println(temp.kelvinToCelsius(200));
+        System.out.println("Convert Kelvin to Celsius");
+        System.out.println("Give temperature in Kelvin: ");
+        int kelvin = scanner.nextInt();
+        double celsius2 = (int) temp.kelvinToCelsius(kelvin);
+        System.out.println(kelvin + " in Fahrenheit: " + celsius2);
+        System.out.println();
     }
 }
