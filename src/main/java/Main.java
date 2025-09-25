@@ -1,9 +1,16 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
 
+        Scanner scanner = new Scanner(System.in);
         TemperatureConverter temp = new TemperatureConverter();
 
-        // https://www.nfcacademy.com/wp-content/uploads/1/2/8/6/12864732/celsius-to-fahrenheit-conversion-chart-5s.pdf
+        System.out.println("Convert Fahrenheit to Celsius");
+        System.out.println("Give temperature in Fahrenheit: ");
+        int fahrenheit = scanner.nextInt();
+        double celsius = (int) temp.fahrenheitToCelsius(fahrenheit);
+        System.out.println(fahrenheit + " in Celsius: " + celsius);
 
         // 32F = 0C
         // 68F = 20C
@@ -26,5 +33,7 @@ public class Main {
         System.out.println(temp.isExtremeTemperature(55));
         System.out.println(temp.isExtremeTemperature(-60));
         System.out.println(temp.isExtremeTemperature(-64));
+
+        System.out.println(temp.kelvinToCelsius(200));
     }
 }

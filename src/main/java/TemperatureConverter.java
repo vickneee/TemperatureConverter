@@ -1,7 +1,5 @@
 public class TemperatureConverter {
 
-    // https://www.w3resource.com/java-exercises/datatypes/java-datatype-exercise-1.php
-
     public double fahrenheitToCelsius(double fahrenheit) {
         double celsius;
         celsius = (5 * (fahrenheit - 32)) / 9;
