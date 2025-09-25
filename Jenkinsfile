@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+        PATH = "/usr/local/bin:${env.PATH}"
         // Define Docker Hub credentials ID
         DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
         // Define Docker Hub repository name
@@ -10,7 +10,7 @@ pipeline {
         DOCKER_IMAGE_TAG = 'latest'
     }
     tools {
-        maven 'MAVEN_HOME'
+        maven 'Maven3'
     }
 
     stages {
@@ -24,17 +24,17 @@ pipeline {
 
         stage ('Build') {
             steps {
-                bat 'mvn clean install'
+                sh 'mvn clean install'
             }
         }
         stage('Test') {
               steps {
-                     bat 'mvn test'
+                     sh 'mvn test'
               }
         }
         stage('Code Coverage') {
               steps {
-                     bat 'mvn jacoco:report'
+                     sh 'mvn jacoco:report'
               }
         }
         stage('Publish Test Results') {
@@ -50,7 +50,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t %DOCKERHUB_REPO%:%DOCKER_IMAGE_TAG% .'
+                bat 'docker build -t $DOCKERHUB_REPO:$DOCKER_IMAGE_TAG .'
             }
         }
 
@@ -58,8 +58,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     bat '''
-                        docker login -u %DOCKER_USER% -p %DOCKER_PASS%
-                        docker push %DOCKERHUB_REPO%:%DOCKER_IMAGE_TAG%
+                        docker login -u $DOCKER_USER -p $DOCKER_PASS
+                        docker push $DOCKERHUB_REPO:$DOCKER_IMAGE_TAG
                     '''
                 }
             }
