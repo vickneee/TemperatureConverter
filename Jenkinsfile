@@ -14,7 +14,6 @@ pipeline {
     }
 
     stages {
-        node ('windows') {
         stage ('Checking') {
             steps {
                 git branch: 'main', url: 'https://github.com/vickneee/TemperatureConverter.git'
@@ -65,7 +64,6 @@ pipeline {
             }
         }
 
-        }
     }
 
 }
