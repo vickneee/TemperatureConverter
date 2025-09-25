@@ -10,7 +10,7 @@ pipeline {
         DOCKER_IMAGE_TAG = 'latest'
     }
     tools {
-        maven 'Maven3'
+        maven 'MAVEN_HOME'
     }
 
     stages {
