@@ -23,12 +23,12 @@ pipeline {
 
         stage ('Build') {
             steps {
-                sh 'mvn clean install'
+                  sh 'mvn clean install'
             }
         }
         stage('Test') {
               steps {
-                     sh 'mvn test'
+                    sh 'mvn test'
               }
         }
         stage('Code Coverage') {
