@@ -41,6 +41,7 @@ pipeline {
                   junit '**/target/surefire-reports/*.xml'
              }
         }
+
         stage('Publish Coverage Report') {
               steps {
                     jacoco()
@@ -49,7 +50,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                def app = docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
+                script {
+                    def app = docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
+                }
             }
         }
 
