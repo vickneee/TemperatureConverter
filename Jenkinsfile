@@ -54,9 +54,8 @@ pipeline {
                     sh """
                     docker buildx create --use || true
                     docker buildx build \\
-                        --platform linux/amd64,linux/arm64 \\
+                        --platform linux/amd64, linux/arm64 \\
                         -t ${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} \\
-                        --push .
                     """
                 }
             }
