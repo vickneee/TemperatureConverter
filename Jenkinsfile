@@ -23,28 +23,13 @@ pipeline {
 
         stage ('Build') {
             steps {
-                  sh 'mvn clean install'
+                  sh 'mvn clean package -DskipTests'
             }
         }
+
         stage('Test') {
               steps {
                     sh 'mvn test'
-              }
-        }
-        stage('Code Coverage') {
-              steps {
-                     sh 'mvn jacoco:report'
-              }
-        }
-        stage('Publish Test Results') {
-             steps {
-                  junit '**/target/surefire-reports/*.xml'
-             }
-        }
-
-        stage('Publish Coverage Report') {
-              steps {
-                    jacoco()
               }
         }
 
@@ -65,6 +50,14 @@ pipeline {
                     '''
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            // Only archive if files exist
+            junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
+            jacoco execPattern: '**/target/jacoco.exec'
         }
     }
 }
