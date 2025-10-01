@@ -1,4 +1,4 @@
-# Temperature Converter JavaFX XQuartz Jenkins Docker macOS
+## Temperature Converter JavaFX XQuartz Jenkins Docker macOS
 
 On macOS, you can use XQuartz as the X11 server, and connect your Docker container to it.
 
