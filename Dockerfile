@@ -17,8 +17,8 @@ RUN mkdir -p /javafx-sdk \
     && mv /javafx-sdk/javafx-sdk-21.0.2/lib /javafx-sdk/lib \
     && rm -rf /javafx-sdk/javafx-sdk-21.0.2 javafx.zip
 
-# Copy your JAR
-COPY target/*.jar app.jar
+# Copy your JAR (target/app.jar -> used same name as jar)
+COPY target/app.jar app.jar
 
 # Force software rendering (avoid ES2 crash)
 ENV JAVAFX_PRISM_SW=true
