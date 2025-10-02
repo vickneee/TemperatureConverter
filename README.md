@@ -52,7 +52,7 @@ docker run -it --rm \
     temperature-converter # Use correct name
 ```
 
-If error use mvn clean:
+If error use mvn clean in your project folder:
 
 clean → deletes the target/ folder
 
