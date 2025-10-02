@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -13,23 +14,52 @@ public class TemperatureApp extends Application {
 
     @Override
     public void start(Stage stage) {
-        Label inputLabel = new Label("Enter Fahrenheit: ");
+        ComboBox<String> mapTypeBox = new ComboBox<>();
+        mapTypeBox.getItems().addAll("Fahrenheit to Celsius", "Celsius to Fahrenheit", "Kelvin to Celsius");
+        mapTypeBox.setValue("Fahrenheit to Celsius"); // Default value
+
         TextField inputField = new TextField();
-        Button convertButton = new Button("Convert to Celsius");
+        inputField.setPromptText("Enter value: ");
+
+        Button convertButton = new Button("Convert");
         Label resultLabel = new Label();
+        Label statusLabel = new Label();
 
         // Button action
         convertButton.setOnAction(e -> {
             try {
-                double fahrenheit = Double.parseDouble(inputField.getText());
-                double celsius = converter.fahrenheitToCelsius(fahrenheit); // Converter method
-                resultLabel.setText(fahrenheit + " °F = " + celsius + " °C");
+                double value = Double.parseDouble(inputField.getText());
+                String type = mapTypeBox.getValue();
+
+                switch (type) {
+                    case "Fahrenheit to Celsius":
+                        double celsius = converter.fahrenheitToCelsius(value);
+                        resultLabel.setText(value + " °F = " + celsius + " °C");
+                        // Save: Celsius and original Fahrenheit value
+                        Database.saveTemperature(celsius, value, 0, statusLabel);
+                        break;
+                    case "Celsius to Fahrenheit":
+                        double fahrenheit = converter.celsiusToFahrenheit(value);
+                        resultLabel.setText(value + " °C = " + fahrenheit + " °F");
+                        // Save: original Celsius value and converted Fahrenheit
+                        Database.saveTemperature(value, fahrenheit, 0, statusLabel);
+                        break;
+                    case "Kelvin to Celsius":
+                        double celsiusFromKelvin = converter.kelvinToCelsius(value);
+                        resultLabel.setText(value + " °K = " + celsiusFromKelvin + " °C");
+                        // Save: Celsius and null for Fahrenheit (or 0 if your DB allows)
+                        Database.saveTemperature(celsiusFromKelvin, 0, value, statusLabel);
+                        break;
+                    default:
+                        resultLabel.setText("Unknown conversion!");
+                }
+
             } catch (NumberFormatException ex) {
                 resultLabel.setText("Please enter a valid number!");
             }
         });
 
-        VBox vbox = new VBox(10, inputLabel, inputField, convertButton, resultLabel);
+        VBox vbox = new VBox(10, mapTypeBox, inputField, convertButton, resultLabel, statusLabel);
         vbox.setPadding(new Insets(15));
 
         Scene scene = new Scene(vbox, 300,300);
