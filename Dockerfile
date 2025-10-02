@@ -23,5 +23,8 @@ COPY target/app.jar app.jar
 # Force software rendering (avoid ES2 crash)
 ENV JAVAFX_PRISM_SW=true
 
+# Use host X11 display
+ENV DISPLAY=:0
+
 # CMD to run JavaFX app
 CMD ["java", "--module-path", "/javafx-sdk/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
