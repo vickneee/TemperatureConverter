@@ -50,7 +50,7 @@
     </dependencies>
 
     <build>
-        <finalName>app</finalName>
+        <finalName>temperature-converter</finalName>
         <plugins>
 
             <!-- Compiler plugin -->
