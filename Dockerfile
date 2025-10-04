@@ -1,10 +1,4 @@
-# Stage 1: Build
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
-
-# Stage 2: Run
+# Stage
 FROM openjdk:17-jdk-slim
 
 WORKDIR /app
@@ -24,11 +18,19 @@ RUN mkdir -p /javafx-sdk \
     && mv /javafx-sdk/javafx-sdk-21.0.2/lib /javafx-sdk/lib \
     && rm -rf /javafx-sdk/javafx-sdk-21.0.2 javafx.zip
 
-# Copy your JAR (target/app.jar -> used same name as generated.jar file)
-COPY --from=build /app/target/*.jar app.jar
+# Copy the shaded JAR
+# COPY target/app.jar app.jar
+COPY target/TemperatureConverter-1.0-SNAPSHOT-shaded.jar app.jar
 
 # Force software rendering (avoid ES2 crash)
-ENV JAVAFX_PRISM_SW=true
+# ENV JAVAFX_PRISM_SW=true # (Removed this line as the CMD below covers it)
 
 # CMD to run JavaFX app
-CMD ["java", "--module-path", "/javafx-sdk/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
+# CMD ["java", "--module-path", "/javafx-sdk/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
+
+# CMD to run JavaFX app
+# The key additions here are:
+# 1. -Dglass.platform=Monocle and -Dmonocle.platform=OffScreen: Tell JavaFX to use the headless Monocle platform.
+# 2. -Dprism.order=sw: Explicitly forces the software (SW) rendering pipeline.
+CMD ["java", "-Dglass.platform=Monocle", "-Dmonocle.platform=OffScreen", "-Dprism.order=sw", \
+    "--module-path", "/javafx-sdk/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
