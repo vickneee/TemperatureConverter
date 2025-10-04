@@ -1,4 +1,11 @@
-FROM openjdk:17-slim
+# Stage 1: Build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run
+FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
@@ -18,7 +25,7 @@ RUN mkdir -p /javafx-sdk \
     && rm -rf /javafx-sdk/javafx-sdk-21.0.2 javafx.zip
 
 # Copy your JAR (target/app.jar -> used same name as generated.jar file)
-COPY target/app.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 # Force software rendering (avoid ES2 crash)
 ENV JAVAFX_PRISM_SW=true
