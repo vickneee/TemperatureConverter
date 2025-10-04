@@ -3,12 +3,14 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Install GUI + GL libraries
+# Install GUI + GL libraries AND X Virtual Frame Buffer (Xvfb)
+# Xvfb is necessary to run GUI applications (like JavaFX) in a headless environment.
 RUN apt-get update && apt-get install -y \
     libx11-6 libxext6 libxrender1 libxtst6 libxi6 \
     libxrandr2 libxinerama1 libgtk-3-0 \
     libgl1-mesa-glx libgl1-mesa-dri mesa-utils \
     fonts-dejavu wget unzip \
+    xvfb \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and unzip JavaFX Linux SDK
@@ -19,18 +21,11 @@ RUN mkdir -p /javafx-sdk \
     && rm -rf /javafx-sdk/javafx-sdk-21.0.2 javafx.zip
 
 # Copy the shaded JAR
-# COPY target/app.jar app.jar
 COPY target/TemperatureConverter-1.0-SNAPSHOT-shaded.jar app.jar
 
-# Force software rendering (avoid ES2 crash)
-# ENV JAVAFX_PRISM_SW=true # (Removed this line as the CMD below covers it)
-
 # CMD to run JavaFX app
-# CMD ["java", "--module-path", "/javafx-sdk/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
-
-# CMD to run JavaFX app
-# The key additions here are:
-# 1. -Dglass.platform=Monocle and -Dmonocle.platform=OffScreen: Tell JavaFX to use the headless Monocle platform.
-# 2. -Dprism.order=sw: Explicitly forces the software (SW) rendering pipeline.
-CMD ["java", "-Dglass.platform=Monocle", "-Dmonocle.platform=OffScreen", "-Dprism.order=sw", \
-    "--module-path", "/javafx-sdk/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
+# We use 'sh -c' to run a sequence of commands:
+# 1. Start Xvfb (virtual display server) on display :99.
+# 2. Export the DISPLAY variable so JavaFX knows where to render.
+# 3. Run the Java application.
+CMD ["sh", "-c", "Xvfb :99 -screen 0 1024x768x24 & export DISPLAY=:99 && java --module-path /javafx-sdk/lib --add-modules javafx.controls,javafx.fxml -jar app.jar"]
