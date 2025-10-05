@@ -20,12 +20,14 @@ RUN mkdir -p /javafx-sdk \
     && mv /javafx-sdk/javafx-sdk-21.0.2/lib /javafx-sdk/lib \
     && rm -rf /javafx-sdk/javafx-sdk-21.0.2 javafx.zip
 
-# Copy the shaded JAR
-COPY target/TemperatureConverter-1.0-SNAPSHOT-shaded.jar app.jar
+# Copy your JAR (target/app.jar -> used same name as generated.jar file)
+COPY target/app.jar app.jar
+
+# Force software rendering (avoid ES2 crash)
+ENV JAVAFX_PRISM_SW=true
+
+# Use host X11 display
+ENV DISPLAY=:0
 
 # CMD to run JavaFX app
-# We use 'sh -c' to run a sequence of commands:
-# 1. Start Xvfb (virtual display server) on display :99.
-# 2. Export the DISPLAY variable so JavaFX knows where to render.
-# 3. Run the Java application.
-CMD ["sh", "-c", "Xvfb :99 -screen 0 1024x768x24 & export DISPLAY=:99 && java --module-path /javafx-sdk/lib --add-modules javafx.controls,javafx.fxml -jar app.jar"]
+CMD ["java", "--module-path", "/javafx-sdk/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
