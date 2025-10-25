@@ -27,7 +27,7 @@ COPY target/app.jar app.jar
 ENV JAVAFX_PRISM_SW=true
 
 # Use host X11 display
-ENV DISPLAY=:0
+ENV DISPLAY=host.docker.internal:0.0
 
 # CMD to run JavaFX app
 CMD ["java", "--module-path", "/javafx-sdk/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
