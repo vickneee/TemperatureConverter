@@ -1,12 +1,15 @@
+import io.github.cdimascio.dotenv.Dotenv;
 import javafx.scene.control.Label;
 
 import java.sql.*;
 
 public class Database {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/temperatureconverter_mariadb";
-    private static final String USER = "victoria";
-    private static final String PASSWORD = "victoria";
+    private static final Dotenv dotenv = Dotenv.load();
+
+    private static final String URL = dotenv.get("DB_URL");
+    private static final String USER = dotenv.get("DB_USER");
+    private static final String PASSWORD = dotenv.get("DB_PASSWORD");;
 
     public static void saveTemperature(double celsius, double fahrenheit, double kelvin, Label statusLabel) {
         String sql = "INSERT INTO temperature_log (celsius, fahrenheit, kelvin) VALUES (?, ?, ?)";
